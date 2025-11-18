@@ -1,6 +1,6 @@
 {
   "name": "@jesusreyes31/angular-dynamic-form-builder",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Generador de formularios dinámicos para Angular 20+ con validaciones personalizadas y diseño moderno",
   "keywords": [
     "angular",
@@ -19,7 +19,7 @@
     "url": "https://github.com/jesusreyes31/angular-dynamic-form-builder.git"
   },
   "bugs": {
-    "url": "https://github.com/your-username/angular-dynamic-form-builder/issues"
+    "url": "https://github.com/jesusreyes31/angular-dynamic-form-builder/issues"
   },
   "peerDependencies": {
     "@angular/common": "^20.3.0",

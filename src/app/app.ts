@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilderComponent, FormConfig } from '../../projects/form-builder/src/public-api';
+import {FormBuilderComponent} from '@jesusreyes31/angular-dynamic-form-builder';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +11,7 @@ export class App {
   /**
    * Configuración del formulario de contacto
    */
-  formConfig: FormConfig = {
+  formConfig: any = {
     title: 'Iniciar Sesión',
     fields: [
       {
