@@ -1,0 +1,137 @@
+<div class="form-container">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" [ngClass]="[getLayoutClass(), config.cssClass || '']"
+        class="dynamic-form">
+
+        <!-- Form Header -->
+        <div class="form-header">
+            <h2 class="form-title">{{ config.title }}</h2>
+            @if (config.description) {
+            <p class="form-description">{{ config.description }}</p>
+            }
+        </div>
+
+        @for (field of sortedFields; track field.name) {
+        @if (isFieldVisible(field)) {
+        <div class="form-field"
+            [ngClass]="['field-type-' + field.type, field.cssClass || '', hasError(field.name) ? 'has-error' : '']">
+
+            <!-- Label -->
+            @if (field.type !== 'checkbox') {
+            <label [for]="field.name" class="field-label">
+                {{ field.label }}
+                @if (field.validations?.required) {
+                <span class="required-indicator">*</span>
+                }
+            </label>
+            }
+
+            <!-- Text, Email, Password, Number, Tel, URL -->
+            @if (['text', 'email', 'password', 'number', 'tel', 'url'].includes(field.type)) {
+            <input [type]="field.type" [id]="field.name" [formControlName]="field.name"
+                [placeholder]="field.placeholder || ''" [readonly]="field.readonly || false" [step]="field.step"
+                class="form-input" />
+            }
+
+            <!-- Textarea -->
+            @if (field.type === 'textarea') {
+            <textarea [id]="field.name" [formControlName]="field.name" [placeholder]="field.placeholder || ''"
+                [readonly]="field.readonly || false" class="form-textarea" rows="4"></textarea>
+            }
+
+            <!-- Select -->
+            @if (field.type === 'select') {
+            <select [id]="field.name" [formControlName]="field.name" [multiple]="field.multiple || false"
+                class="form-select">
+                @if (!field.multiple) {
+                <option value="">{{ field.placeholder || 'Seleccionar...' }}</option>
+                }
+                @for (option of field.options; track option.value) {
+                <option [value]="option.value" [disabled]="option.disabled || false">
+                    {{ option.label }}
+                </option>
+                }
+            </select>
+            }
+
+            <!-- Radio Buttons -->
+            @if (field.type === 'radio') {
+            <div class="radio-group">
+                @for (option of field.options; track option.value) {
+                <label class="radio-label">
+                    <input type="radio" [id]="field.name + '_' + option.value" [formControlName]="field.name"
+                        [value]="option.value" [disabled]="option.disabled || false" class="radio-input" />
+                    <span class="radio-text">{{ option.label }}</span>
+                </label>
+                }
+            </div>
+            }
+
+            <!-- Checkbox -->
+            @if (field.type === 'checkbox') {
+            <label class="checkbox-label" [for]="field.name">
+                <input type="checkbox" [id]="field.name" [formControlName]="field.name" class="checkbox-input" />
+                <span class="checkbox-text">
+                    {{ field.label }}
+                    @if (field.validations?.required) {
+                    <span class="required-indicator">*</span>
+                    }
+                </span>
+            </label>
+            }
+
+            <!-- Date, Time, Datetime-local -->
+            @if (['date', 'time', 'datetime-local'].includes(field.type)) {
+            <input [type]="field.type" [id]="field.name" [formControlName]="field.name" class="form-input" />
+            }
+
+            <!-- File -->
+            @if (field.type === 'file') {
+            <input type="file" [id]="field.name" [accept]="field.accept || ''" [multiple]="field.multiple || false"
+                class="form-input-file" (change)="onFileChange($event, field.name)" />
+            }
+
+            <!-- Range -->
+            @if (field.type === 'range') {
+            <div class="range-container">
+                <input type="range" [id]="field.name" [formControlName]="field.name" [min]="field.validations?.min || 0"
+                    [max]="field.validations?.max || 100" [step]="field.step || 1" class="form-range" />
+                <output class="range-value">{{ form.get(field.name)?.value }}</output>
+            </div>
+            }
+
+            <!-- Color -->
+            @if (field.type === 'color') {
+            <input type="color" [id]="field.name" [formControlName]="field.name" class="form-input-color" />
+            }
+
+            <!-- Hint Text -->
+            @if (field.hint) {
+            <small class="field-hint">{{ field.hint }}</small>
+            }
+
+            <!-- Error Message -->
+            @if (hasError(field.name)) {
+            <div class="error-message">
+                {{ getErrorMessage(field.name) }}
+            </div>
+            }
+
+        </div>
+        }
+        }
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+            <button type="submit" [disabled]="form.invalid" class="btn btn-primary">
+                {{ getSubmitButtonText() }}
+            </button>
+
+            @if (shouldShowResetButton()) {
+            <button type="button" (click)="onReset()" class="btn btn-secondary">
+                {{ getResetButtonText() }}
+            </button>
+            }
+        </div>
+
+    </form>
+</div>
